@@ -58,10 +58,20 @@ export class Chart implements OnInit {
                 const series = this as unknown as Highcharts.Series;
                 // Fade out all legend items first
                 legendItems.forEach((item: Highcharts.Series) => {
-                  if (item.legendItem?.label?.element) {
+                  if (
+                    item.legendItem?.label?.element &&
+                    !item.legendItem?.label?.element.isEqualNode(
+                      series.legendItem?.label?.element
+                    )
+                  ) {
                     item.legendItem.label.element.style.opacity = '0.3';
                   }
-                  if (item.legendItem?.symbol?.element) {
+                  if (
+                    item.legendItem?.symbol?.element &&
+                    !item.legendItem?.symbol?.element.isEqualNode(
+                      series.legendItem?.symbol?.element
+                    )
+                  ) {
                     item.legendItem.symbol.element.style.opacity = '0.3';
                   }
                 });
