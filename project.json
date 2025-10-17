@@ -58,7 +58,9 @@
           "buildTarget": "test-highcharts:build:development"
         }
       },
-      "port": 4300,
+      "options": {
+        "port": 4400
+      },
       "defaultConfiguration": "development"
     },
     "extract-i18n": {
@@ -85,7 +87,7 @@
       "executor": "@nx/web:file-server",
       "options": {
         "buildTarget": "test-highcharts:build",
-        "port": 4200,
+        "port": 4400,
         "staticFilePath": "dist/test-highcharts/browser",
         "spa": true
       }

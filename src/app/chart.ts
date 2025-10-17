@@ -46,7 +46,128 @@ export class Chart implements OnInit {
           allowPointSelect: true,
           cursor: 'pointer',
           dataLabels: {
-            enabled: true,
+            enabled: false,
+          },
+          showInLegend: true,
+          point: {
+            events: {
+              mouseOver: (e) => {
+                const point = (e.currentTarget ??
+                  e.target) as unknown as Highcharts.Point & {
+                  legendItem?: {
+                    label: { element: HTMLElement };
+                    symbol: { element: HTMLElement };
+                    group: { element: HTMLElement };
+                  };
+                  series?: {
+                    chart?: {
+                      legend?: {
+                        allItems?: Array<{
+                          legendItem?: {
+                            label: { element: HTMLElement };
+                            symbol: { element: HTMLElement };
+                            group: { element: HTMLElement };
+                          };
+                        }>;
+                      };
+                    };
+                  };
+                };
+
+                // Get all legend items
+                const chart = point.series?.chart;
+                const legendItems = chart?.legend?.allItems || [];
+
+                // Fade out all legend items first
+                legendItems.forEach(
+                  (item: {
+                    legendItem?: {
+                      label: { element: HTMLElement };
+                      symbol: { element: HTMLElement };
+                      group: { element: HTMLElement };
+                    };
+                  }) => {
+                    if (item.legendItem?.label?.element) {
+                      item.legendItem.label.element.style.opacity = '0.3';
+                    }
+                    if (item.legendItem?.symbol?.element) {
+                      item.legendItem.symbol.element.style.opacity = '0.3';
+                    }
+                    if (item.legendItem?.group?.element) {
+                      item.legendItem.group.element.style.opacity = '0.3';
+                    }
+                  }
+                );
+
+                // Highlight the corresponding legend item
+                if (point.legendItem?.label?.element) {
+                  point.legendItem.label.element.style.opacity = '1';
+                }
+                if (point.legendItem?.symbol?.element) {
+                  point.legendItem.symbol.element.style.opacity = '1';
+                }
+                if (point.legendItem?.group?.element) {
+                  point.legendItem.group.element.style.opacity = '1';
+                }
+              },
+              mouseOut: (e) => {
+                const point = (e.currentTarget ??
+                  e.target) as unknown as Highcharts.Point & {
+                  legendItem?: {
+                    label: { element: HTMLElement };
+                    symbol: { element: HTMLElement };
+                    group: { element: HTMLElement };
+                  };
+                  series?: {
+                    chart?: {
+                      legend?: {
+                        allItems?: Array<{
+                          legendItem?: {
+                            label: { element: HTMLElement };
+                            symbol: { element: HTMLElement };
+                            group: { element: HTMLElement };
+                          };
+                        }>;
+                      };
+                    };
+                  };
+                };
+
+                // Get all legend items and restore their opacity
+                const chart = point.series?.chart;
+                const legendItems = chart?.legend?.allItems || [];
+
+                legendItems.forEach(
+                  (item: {
+                    legendItem?: {
+                      label: { element: HTMLElement };
+                      symbol: { element: HTMLElement };
+                      group: { element: HTMLElement };
+                    };
+                  }) => {
+                    if (item.legendItem?.label?.element) {
+                      item.legendItem.label.element.style.opacity = '1';
+                    }
+                    if (item.legendItem?.symbol?.element) {
+                      item.legendItem.symbol.element.style.opacity = '1';
+                    }
+                    if (item.legendItem?.group?.element) {
+                      item.legendItem.group.element.style.opacity = '1';
+                    }
+                  }
+                );
+
+                const legendElement = point.legendItem?.label?.element;
+                if (legendElement) {
+                  legendElement.dispatchEvent(
+                    new MouseEvent('mouseout', {
+                      bubbles: true,
+                      cancelable: true,
+                    })
+                  );
+                }
+              },
+            },
           },
         },
       },
