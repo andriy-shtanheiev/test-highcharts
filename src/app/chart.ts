@@ -22,8 +22,8 @@ export class Chart implements OnInit {
   private readonly _chartOptions = signal<Highcharts.Options>({});
   public readonly chartOptions = this._chartOptions.asReadonly();
 
-  ngOnInit(): void {
-    this.initializeChart();
+  async ngOnInit(): Promise<void> {
+    await this.initializeChart();
   }
 
   private async initializeChart() {
@@ -100,7 +100,16 @@ export class Chart implements OnInit {
               },
             },
           },
+          center: ['50%', '50%'], // Position the pie to the center
         },
+      },
+      legend: {
+        align: 'center', // Center the legend horizontally
+        verticalAlign: 'middle', // Vertically center the legend
+        layout: 'vertical', // Arrange legend items vertically
+        x: 250, // Adjust this value to position it next to the pie
+        y: 0, // No vertical offset needed if 'verticalAlign' is 'middle',
+        itemMarginBottom: 10, // Space between legend items
       },
       series: [
         {
